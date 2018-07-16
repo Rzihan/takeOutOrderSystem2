@@ -70,6 +70,7 @@ public class SignInServlet extends HttpServlet {
         if(userService.signIn(user)) {
             //注册成功
             req.getRequestDispatcher(SIGN_IN_SUCCESS_PAGE).forward(req, resp);
+            return;
         }
         //注册失败
         errorList.add(PHONE_NUMBER_HAS_BEEN_REGISTERED);

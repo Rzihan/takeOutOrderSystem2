@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.storeMapper">
+
+    <!--用户提交开店申请,往用户表添加数据-->
+    <insert id="applyForStore" parameterType="Store">
+        INSERT INTO store
+        (user_id,store_name,store_type,store_comments,store_address,store_logo)
+        VALUES
+        (#{userId},#{storeName},#{storeType},#{storeComments},#{storeAddress},#{storeLogo})
+    </insert>
+
+    <!--用户根据id获取店铺信息-->
+    <select id="getStoreByUserId" parameterType="java.lang.Integer" resultMap="getStoreByUserIdResultMap">
+        SELECT id,store_name,store_type,store_comments,store_address,apply_for_state
+        FROM store WHERE user_id = #{userId}
+    </select>
+    <resultMap id="getStoreByUserIdResultMap" type="Store">
+        <id property="id" column="id"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeType" column="store_type"/>
+        <result property="storeComments" column="store_comments"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="applyForState" column="apply_for_state"/>
+    </resultMap>
+
+    <!--根据id和userId删除开店申请记录-->
+    <delete id="deleteApplyFor" parameterType="Store">
+        DELETE FROM store WHERE id = #{id} AND user_id = #{userId}
+    </delete>
+
+    <!--改变用户店铺申请状态-->
+    <update id="updateApplyForState" parameterType="Store">
+        UPDATE store set apply_for_state = #{applyForState} WHERE id = #{id}
+    </update>
+
+    <!--删除用户与角色表的数据-->
+    <delete id="deleteUserAndRole" parameterType="Store">
+        DELETE FROM user_and_role WHERE user_id = #{userId} AND role_id = 2
+    </delete>
+
+    <!--获取查询的总记录条数-->
+    <select id="getAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(*) FROM store
+        WHERE apply_for_state = #{APPLY_FOR_STATE}
+        AND (store_name LIKE #{SEARCH} OR store_type LIKE #{SEARCH})
+    </select>
+
+    <!--用户查询店铺信息-->
+    <select id="userFindStores" parameterType="java.util.Map" resultMap="FindStoresResultMap">
+        SELECT id,store_name,store_type,store_sales,store_grade,store_comments,store_address,store_logo
+        FROM store WHERE apply_for_state = #{APPLY_FOR_STATE}
+        AND (store_name LIKE #{SEARCH} OR store_type LIKE #{SEARCH})
+        LIMIT #{STARTROW},#{PAGE_SIZE}
+    </select>
+    <resultMap id="FindStoresResultMap" type="Store">
+        <id property="id" column="id"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeType" column="store_type"/>
+        <result property="storeSales" column="store_sales"/>
+        <result property="storeGrade" column="store_grade"/>
+        <result property="storeComments" column="store_comments"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="storeLogo" column="store_logo"/>
+    </resultMap>
+
+    <!--查询申请开店的总记录条数-->
+    <select id="getAllApplyStoreAllTotal" parameterType="java.util.Map" resultType="int">
+        SELECT count(*) FROM store WHERE apply_for_state IN (#{STORE_BEING_CHECK},#{STORE_CHECK_SUCCESS})
+    </select>
+
+    <!--查看所有申请开店的记录-->
+    <select id="findAllApplyStoreStatement" parameterType="java.util.Map" resultMap="findAllApplyStoreResultMap">
+        SELECT id,user_id,store_name,store_type,store_comments,store_address,apply_for_state
+        FROM store WHERE apply_for_state IN (#{STORE_BEING_CHECK},#{STORE_CHECK_SUCCESS})
+        LIMIT #{STARTROW},#{PAGE_SIZE}
+    </select>
+    <resultMap id="findAllApplyStoreResultMap" type="Store">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="storeName" column="store_name"/>
+        <result property="storeType" column="store_type"/>
+        <result property="storeComments" column="store_comments"/>
+        <result property="storeAddress" column="store_address"/>
+        <result property="applyForState" column="apply_for_state"/>
+    </resultMap>
+
+    <!--往用户角色表添加数据-->
+    <insert id="addUserAndRole" parameterType="Store">
+        INSERT INTO user_and_role VALUES(#{userId},2)
+    </insert>
+
+</mapper>
