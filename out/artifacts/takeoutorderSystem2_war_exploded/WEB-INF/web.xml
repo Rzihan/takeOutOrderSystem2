@@ -37,7 +37,19 @@
         <servlet-name>SignInServlet</servlet-name>
         <servlet-class>com.topview.www.controller.user.user.SignInServlet</servlet-class>
     </servlet>
-
+    
+    <!--用户查询个人信息-->
+    <servlet>
+        <servlet-name>UserManageServlet</servlet-name>
+        <servlet-class>com.topview.www.controller.user.user.UserManageServlet</servlet-class>
+    </servlet>
+    
+    <!--安全退出-->
+    <servlet>
+        <servlet-name>ExitServlet</servlet-name>
+        <servlet-class>com.topview.www.controller.ExitServlet</servlet-class>
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -47,8 +59,16 @@
         <servlet-name>SignInServlet</servlet-name>
         <url-pattern>/user/user/SignInServlet</url-pattern>
     </servlet-mapping>
-
-
+    
+    <servlet-mapping>
+        <servlet-name>UserManageServlet</servlet-name>
+        <url-pattern>/user/user/UserManageServlet</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ExitServlet</servlet-name>
+        <url-pattern>/ExitServlet</url-pattern>
+    </servlet-mapping>
 
 
 

@@ -18,4 +18,30 @@ public class MyBatisUtils {
         return sessionFactory.openSession();
     }
 
+    public static boolean addData(String statement, Object obj){
+        SqlSession session = getSqlSession();
+        int result = session.insert(statement, obj);
+        session.commit();
+        session.close();
+        return result != 0;
+    }
+
+    public static boolean deteleData(String statement, Object obj) {
+        SqlSession session = getSqlSession();
+        int result = session.delete(statement, obj);
+        session.commit();
+        session.close();
+        return result != 0;
+    }
+
+    public static boolean updateData(String statement, Object obj){
+        SqlSession session = getSqlSession();
+        int result = session.update(statement, obj);
+        session.commit();
+        session.close();
+        return result != 0;
+    }
+
+
+
 }

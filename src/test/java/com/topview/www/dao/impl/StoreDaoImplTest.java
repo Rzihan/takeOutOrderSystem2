@@ -13,7 +13,7 @@ public class StoreDaoImplTest {
     @Test
     public void applyForStore() {
         Store s = new Store();
-        s.setUserId(46);
+        s.setUserId(45);
         s.setStoreName("重庆火锅店");
         s.setStoreType("火锅");
         s.setStoreComments("具有本地特色");
@@ -33,7 +33,7 @@ public class StoreDaoImplTest {
         Store s = new Store();
         s.setId(499);
         s.setUserId(27);
-        assertEquals(true, new StoreDaoImpl().deleteApplyFor(s));
+        new StoreDaoImpl().deleteApplyFor(s);
     }
 
     @Test

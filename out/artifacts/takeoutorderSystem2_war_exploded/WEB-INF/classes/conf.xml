@@ -22,5 +22,8 @@
 
     <mappers>
         <mapper resource="mapper\userMapper.xml"/>
+        <mapper resource="mapper\storeMapper.xml"/>
+        <mapper resource="mapper\myAddressMapper.xml"/>
+        <mapper resource="mapper\evaluationMapper.xml"/>
     </mappers>
 </configuration>

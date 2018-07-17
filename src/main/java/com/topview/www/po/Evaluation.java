@@ -72,4 +72,14 @@ public class Evaluation {
 		this.foodEvaluation = foodEvaluation;
 	}
 
+	@Override
+	public String toString() {
+		return "Evaluation{" +
+				"id=" + id +
+				", userId=" + userId +
+				", foodId=" + foodId +
+				", storeId=" + storeId +
+				", foodEvaluation='" + foodEvaluation + '\'' +
+				'}';
+	}
 }

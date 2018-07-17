@@ -13,26 +13,26 @@ import java.util.Map;
 
 public class StoreDaoImpl implements StoreDao {
 
-    private static final Integer APPLY_FOR_STORE_FAILURE = -1;
-    private static final String APPLY_FOR_STORE_STATEMENT = "mapper.storeMapper.applyForStore";
-    private static final String GET_STORE_BY_USER_ID_STATEMENT = "mapper.storeMapper.getStoreByUserId";
-    private static final int DELETE_APPLY_FOR_FAILURE = 0;
-    private static final String DELETE_APPLY_FOR_STATEMENT = "mapper.storeMapper.deleteApplyFor";
-    private static final String UPDATE_APPLY_FOR_STATE_STATEMENT = "mapper.storeMapper.updateApplyForState";
-    private static final String DELETE_USER_AND_ROLE = "mapper.storeMapper.deleteUserAndRole";
-    private static final int CLOSE_STORE_FAILURE = 0;
+    private static final String STORE_MAPPER_NAMESPACE = "mapper.storeMapper.";
+    private static final String APPLY_FOR_STORE_STATEMENT = STORE_MAPPER_NAMESPACE + "applyForStore";
+    private static final String GET_STORE_BY_USER_ID_STATEMENT = STORE_MAPPER_NAMESPACE + "getStoreByUserId";
+    private static final String DELETE_APPLY_FOR_STATEMENT = STORE_MAPPER_NAMESPACE + "deleteApplyFor";
+    private static final String UPDATE_APPLY_FOR_STATE_STATEMENT = STORE_MAPPER_NAMESPACE + "updateApplyForState";
+    private static final String DELETE_USER_AND_ROLE_STATEMENT = STORE_MAPPER_NAMESPACE + "deleteUserAndRole";
+    private static final String GET_ALL_TOTAL_STATEMENT = STORE_MAPPER_NAMESPACE + "getAllTotal";
+    private static final String USER_FIND_STORES_STATEMENT = STORE_MAPPER_NAMESPACE + "userFindStores";
+    private static final String GET_ALL_APPLY_STORE_ALL_TOTAL_STATEMENT = STORE_MAPPER_NAMESPACE
+            + "getAllApplyStoreAllTotal";
+    private static final String FINA_ALL_APPLY_STORE_STATEMENT = STORE_MAPPER_NAMESPACE + "findAllApplyStoreStatement";
+    private static final String ADD_USER_AND_ROLE_STATEMENT = STORE_MAPPER_NAMESPACE + "addUserAndRole";
 
-    private static final String GET_ALL_TOTAL = "mapper.storeMapper.getAllTotal";
+    private static final int CLOSE_STORE_FAILURE = StoreConstants.CHECK_FAILURE;
     private static final String SEARCH = "SEARCH";
     private static final String APPLY_FOR_STATE = "APPLY_FOR_STATE";
     private static final String STARTROW = "STARTROW";
     private static final String PAGE_SIZE = "PAGE_SIZE";
-    private static final String USER_FIND_STORES_STATEMENT = "mapper.storeMapper.userFindStores";
-    private static final String GET_ALL_APPLY_STORE_ALL_TOTAL_STATEMENT = "mapper.storeMapper.getAllApplyStoreAllTotal";
-    private static final String FINA_ALL_APPLY_STORE_STATEMENT = "mapper.storeMapper.findAllApplyStoreStatement";
     private static final String STORE_BEING_CHECK = "STORE_BEING_CHECK";
     private static final String STORE_CHECK_SUCCESS = "STORE_CHECK_SUCCESS";
-    private static final String ADD_USER_AND_ROLE_STATEMENT = "mapper.storeMapper.addUserAndRole";
 
 
     /**
@@ -41,11 +41,7 @@ public class StoreDaoImpl implements StoreDao {
      * @return 成功添加,返回true,否则返回false
      */
     public boolean applyForStore(Store store) {
-        SqlSession session = MyBatisUtils.getSqlSession();
-        int result = session.insert(APPLY_FOR_STORE_STATEMENT, store);
-        session.commit();
-        session.close();
-        return !APPLY_FOR_STORE_FAILURE.equals(result);
+        return MyBatisUtils.addData(APPLY_FOR_STORE_STATEMENT, store);
     }
 
     /**
@@ -67,11 +63,7 @@ public class StoreDaoImpl implements StoreDao {
      * @return 删除成功返回true,否则返回false
      */
     public boolean deleteApplyFor(Store store) {
-        SqlSession session = MyBatisUtils.getSqlSession();
-        int result = session.delete(DELETE_APPLY_FOR_STATEMENT, store);
-        session.commit();
-        session.close();
-        return DELETE_APPLY_FOR_FAILURE != result;
+        return MyBatisUtils.deteleData(DELETE_APPLY_FOR_STATEMENT, store);
     }
 
     /**
@@ -87,7 +79,7 @@ public class StoreDaoImpl implements StoreDao {
         Map<String,Object> parameterMap = new HashMap<String, Object>();
         parameterMap.put(SEARCH, "%" + search + "%");
         parameterMap.put(APPLY_FOR_STATE, StoreConstants.CHECK_SUCCESS);
-        int total = session.selectOne(GET_ALL_TOTAL, parameterMap);
+        int total = session.selectOne(GET_ALL_TOTAL_STATEMENT, parameterMap);
         page.setTotalRecord(total);
         int startRow = (page.getCurrentPage() - 1 ) * page.getPageSize();
 
@@ -149,12 +141,8 @@ public class StoreDaoImpl implements StoreDao {
      * @param store 店铺对象
      */
     public boolean rejectApplyFor(Store store) {
-        SqlSession session = MyBatisUtils.getSqlSession();
         store.setApplyForState(StoreConstants.CHECK_FAILURE);
-        int result = session.update(UPDATE_APPLY_FOR_STATE_STATEMENT, store);
-        session.commit();
-        session.close();
-        return result != 0;
+        return MyBatisUtils.updateData(UPDATE_APPLY_FOR_STATE_STATEMENT, store);
     }
 
     /**
@@ -168,7 +156,7 @@ public class StoreDaoImpl implements StoreDao {
         store.setApplyForState(StoreConstants.CHECK_FAILURE);
         session.update(UPDATE_APPLY_FOR_STATE_STATEMENT, store);
         //删除用户角色表中的数据
-        int result = session.delete(DELETE_USER_AND_ROLE, store);
+        int result = session.delete(DELETE_USER_AND_ROLE_STATEMENT, store);
         session.commit();
         session.close();
         return CLOSE_STORE_FAILURE != result;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.evaluationMapper">
+
+    <!--评价表添加数据-->
+    <insert id="addEvaluation" parameterType="Evaluation">
+         INSERT INTO evaluation (user_id,food_id,store_id,food_evaluation)
+		VALUES(#{userId}, #{foodId}, #{storeId}, #{foodEvaluation})
+    </insert>
+
+    <!--根据食物id查询所有评价的总记录条数-->
+    <select id="getEvaluationAllTotal" parameterType="int" resultType="int">
+        SELECT count(*) FROM evaluation WHERE food_id = #{id}
+    </select>
+
+    <!--根据食物id查询评价-->
+    <select id="getEvaluationListByFoodId" parameterType="java.util.Map" resultMap="EvaluationMap">
+        SELECT * FROM evaluation WHERE food_id = #{FOOD_ID}
+        LIMIT #{START_ROW},#{PAGE_SIZE}
+    </select>
+    <resultMap id="EvaluationMap" type="Evaluation">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="foodId" column="food_id"/>
+        <result property="storeId" column="store_id"/>
+        <result property="foodEvaluation" column="food_evaluation"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.myAddressMapper">
+
+    <!--添加我的地址-->
+    <select id="addMyAddress" parameterType="MyAddress">
+        INSERT INTO my_address (user_id,linkman,phone,address)
+        VALUES(#{userId},#{linkman},#{phone},#{address})
+    </select>
+
+    <!--删除我的地址-->
+    <delete id="deleteMyAddress" parameterType="int">
+        DELETE FROM my_address WHERE id = #{id}
+    </delete>
+
+    <!--查看我的所有地址-->
+    <select id="findAllMyAddress" parameterType="User" resultMap="MyAddressMap">
+        SELECT * FROM my_address WHERE user_id = #{userId}
+    </select>
+    <resultMap id="MyAddressMap" type="MyAddress">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="linkman" column="linkman"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+    </resultMap>
+
+    <!--根据id,查询我的地址-->
+    <select id="findMyAddressById" parameterType="int" resultMap="MyAddressMap">
+        SELECT * FROM my_address WHERE id = #{id}
+    </select>
+
+    <!--修改我的地址-->
+    <update id="updateMyAddress" parameterType="myAddress">
+        UPDATE  my_address SET linkman = #{linkman},
+            phone = #{phone},address = #{address} WHERE id = #{id}
+    </update>
+</mapper>

@@ -76,4 +76,14 @@ public class MyAddress {
 		this.address = address;
 	}
 
+	@Override
+	public String toString() {
+		return "MyAddress{" +
+				"id=" + id +
+				", userId=" + userId +
+				", linkman='" + linkman + '\'' +
+				", phone='" + phone + '\'' +
+				", address='" + address + '\'' +
+				'}';
+	}
 }
